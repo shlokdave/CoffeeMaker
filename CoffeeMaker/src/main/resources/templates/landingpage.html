@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to CoffeeMaker</title>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        .hero-section {
+            background-color: #f8f9fa;
+            padding: 20px 0;
+            text-align: center;
+        }
+        .navigation {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .sign-up-btn {
+            margin: 30px auto;
+            display: block;
+            width: 200px;
+        }
+        .login-link {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+
+    <div ng-app="myLandingApp" class="container">
+        <div class="hero-section">
+        </div>
+        
+        <div class="navigation">
+            <button class="sign-up-btn btn btn-primary" onclick="location.href = '/signup'">Sign up for CoffeeMaker!</button>
+            <a href="/login" class="login-link">Already have an account? Sign in here!</a>
+        </div>
+    </div>
+
+    <script>
+        /*<![CDATA[*/
+        var app = angular.module('myLandingApp', []);
+        /*]]>*/
+    </script>
+
+</body>
+</html>

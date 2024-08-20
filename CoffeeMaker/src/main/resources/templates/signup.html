@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Sign Up for CoffeeMaker</title>
+    <style>
+        input.ng-valid {
+            background-color: lightgreen;
+        }
+        
+        input.ng-dirty.ng-invalid-required,input.ng-dirty.ng-invalid-number {
+            background-color: red;
+        }
+        
+        input.ng-dirty.ng-invalid-min {
+            background-color: yellow;
+        }
+        
+        
+        </style>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div layout:fragment="content">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+        <script>
+            /*<![CDATA[*/
+            var app = angular.module('myApp', []);
+            app.controller('SignUpController', function($scope, $http, $q) {
+
+                $scope.reset = function() {
+					$scope.user = {
+						name : '',
+						username: '',
+                        password: ''
+					};
+					
+					if (undefined != $scope.addIngredientForm) {
+						$scope.addIngredientForm.$setPristine();
+					}
+				}
+
+                $scope.submit = () => {
+                    $scope.createUser();
+
+                    location.href = '/login';
+                }
+
+                $scope.createUser = () => {
+                    $scope.success = false;
+					$scope.failure = false;
+
+                    $http.post("/api/v1/users", $scope.user).then(
+                        function(success) {
+                            $scope.success = true;
+                            $scope.failure = false;
+                        }, function(rejection) {
+                            $scope.failure = true;
+                            console.error(rejection);
+                        }
+                    )
+                }
+
+                $scope.reset();
+                
+            })
+        </script>
+    </div>
+
+    <div ng-app="myApp" ng-controller="SignUpController" class="generic-container ng-cloak">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="lead">Sign Up for CoffeeMaker</span>
+            </div>
+
+            <div class="formcontainer">
+                <form ng-submit="submit()" name="signUpForm" class="form-horizontal"></form>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-2 control-lable" for="file">Name</label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="user.name" name="name"
+                                class="form-control input-sm"
+                                placeholder="Enter your full name" required="0" />
+                            <div class="has-error" ng-show="addIngredientForm.$dirty">
+                                <span ng-show="signUpForm.name.$error.required">This
+                                is a required field.</span> 
+                                <span ng-show="signUpForm.name.$invalid">This field is
+                                invalid.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-2 control-lable" for="file">Username</label>
+                        <div class="col-md-7">
+                            <input type="text" ng-model="user.username" name="username"
+                                class="form-control input-sm"
+                                placeholder="Enter a username" required="0" />
+                            <div class="has-error" ng-show="addIngredientForm.$dirty">
+                                <span ng-show="signUpForm.name.$error.required">This
+                                is a required field.</span> 
+                                <span ng-show="signUpForm.name.$invalid">This field is
+                                invalid.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-2 control-lable" for="file">Password</label>
+                        <div class="col-md-7">
+                            <input type="password" ng-model="user.password" name="passoword"
+                                class="form-control input-sm"
+                                placeholder="Enter a username" required="0" />
+                            <div class="has-error" ng-show="signUpForm.$dirty">
+                                <span ng-show="signUpForm.name.$error.required">This
+                                is a required field.</span> 
+                                <span ng-show="signUpForm.name.$invalid">This field is
+                                invalid.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-actions floatRight">
+                        <a href="/">Back</a>
+                        <input type="submit" value="Sign Up"
+                            class="btn btn-primary btn-sm" 
+                            ng-disabled="signUpForm.$invalid" ng-click="submit()"/>
+                        <button type="button" ng-click="reset()"
+                            class="btn btn-warning btn-sm"
+                            ng-disabled="signUpForm.$pristine">
+                            Reset Form</button>
+                    </div>
+                </div>	
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

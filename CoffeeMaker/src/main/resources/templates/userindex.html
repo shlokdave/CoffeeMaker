@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Welcome to the CSC326 CoffeeMaker</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body ng-app="userApp" ng-controller="DashboardController as dashboard">
+
+    <h1>Coffee Maker (USER)</h1>
+    <h2>Available Options</h2>
+    <ul>
+        <li><a href="makecoffee.html">Order Coffee</a></li>
+        <li><a href="/orders">View Order Status and Past Orders</a></li>
+        <!-- <li><button class="btn btn-primary" ng-click="dashboard.verifyOrderCompletion()">Check Order Status</button></li>
+        <li ng-if="dashboard.orderIsReady">
+            <div class="alert alert-success" role="alert">
+                Your order is ready for pickup!
+                <button class="btn btn-info" ng-click="dashboard.acknowledgeOrder()">Confirm Pickup</button>
+            </div>
+        </li> -->
+        <li><a href="/logout">Logout</a></li>
+    </ul>
+
+    <script>
+        angular.module('userApp', []).controller('DashboardController', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
+            var dashboard = this;
+            dashboard.orderIsReady = false;
+            dashboard.currentOrderId = null;
+            dashboard.refreshOrderStatus = function() {
+                dashboard.orderIsReady = false;
+                dashboard.currentOrderId = null;
+            };
+
+            dashboard.verifyOrderCompletion = function() {
+                $http.get('/api/v1/userorders').then((response) => {
+                    if (response.data && response.data.length > 0) {
+                        dashboard.orderIsReady = true;
+                        dashboard.currentOrderId = response.data[0].id;
+                    } else {
+                        dashboard.refreshOrderStatus();
+                        alert('There are no completed orders currently.');
+                    }
+                }, (error) => {
+                    console.error('Error while checking order status:', error);
+                    dashboard.refreshOrderStatus();
+                })
+
+                // $http.get('/api/v1/activeorder').then(function(response) {
+                //     if (response.data && response.data.status === 'COMPLETE') {
+                //         dashboard.orderIsReady = true;
+                //         dashboard.currentOrderId = response.data.id;
+                //     } else {
+                //         dashboard.refreshOrderStatus();
+                //         alert('There are no completed orders currently.');
+                //     }
+                // }, function(error) {
+                //     console.error('Error while checking order status:', error);
+                //     dashboard.refreshOrderStatus();
+                // });
+            };
+
+            $interval(dashboard.verifyOrderCompletion, 30000);
+        }]);
+    </script>
+
+</body>
+</html>

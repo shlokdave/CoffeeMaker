@@ -1,0 +1,83 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders</title>
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <link rel="stylesheet" href="css/app.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
+<body>
+    <div class="generic-container ng-cloak" ng-app="myApp" ng-controller="ordersCtrl">
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="lead">Orders</span>
+            </div>
+            <div>
+                <h2 class="lead">In Progress Orders</h2>
+                <div class="row" ng-repeat="o1 in inProgressOrders">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-2 control-label" for="file">{{o1.id}}</label>
+                        <label class="col-md-2 control-label" for="file">{{o1.recipe}}</label>
+                        <label class="col-md-2 control-label" for="file">{{o1.customerName}}</label>
+                        <label class="col-md-2 control-label" for="file">{{o1.status}}</label>
+                        <button class="btn btn-primary" ng-click="brew($index)">Brew</button>
+                    </div>
+                </div>
+                <div ng-if="inProgressOrders.length == 0">There are no in progress orders in Coffee Maker.</div>
+            </div>
+
+            <div>
+                <h2 class="lead">Complete Orders</h2>
+                <div class="row" ng-repeat="o2 in completeOrders">
+                    <div class="form-group col-md-12">
+                        <label class="col-md-2 control-label" for="file">{{o2.id}}</label>
+                        <label class="col-md-2 control-label" for="file">{{o2.recipe}}</label>
+                        <label class="col-md-2 control-label" for="file">{{o2.customerName}}</label>
+                        <label class="col-md-2 control-label" for="file">{{o2.status}}</label>
+                    </div>
+                </div>
+                <div ng-if="completeOrders.length == 0">There are no completed orders in Coffee Maker.</div>
+            </div>
+        </div>
+
+        <a href="/index">Back</a>
+    </div>
+
+    <script>
+        var app = angular.module('myApp', []);
+
+        app.controller('ordersCtrl', function($scope, $http, $interval) {
+            $scope.orders = [];
+            $scope.completeOrders = [];
+            $scope.inProgressOrders = [];
+
+            const getOrders = () => {
+                $http.get("/api/v1/orders").then((response) => {
+                    $scope.orders = response.data;
+                    $scope.inProgressOrders = $scope.orders.filter(o => o.status === "IN_PROGRESS");
+                    $scope.completeOrders = $scope.orders.filter(o => o.status === "COMPLETE");
+                }, (error) => {
+                    console.error("Error fetching orders:", error);
+                });
+            };
+
+            $scope.brew = function(index) {
+                $http.put("/api/v1/complete/" + $scope.inProgressOrders[index].id).then(
+                    (response) => {
+                        $scope.completeOrders.push(response.data);
+                        $scope.inProgressOrders.splice(index, 1);
+                        alert("Order completed successfully and is ready for pickup.");
+                    }, (error) => {
+                        console.error("Failed to complete order:", error);
+                    }
+                );
+            };
+
+            $interval(getOrders, 30000);
+            getOrders();
+        });
+    </script>
+</body>
+</html>

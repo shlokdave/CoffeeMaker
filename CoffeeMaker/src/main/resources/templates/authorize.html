@@ -1,0 +1,113 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Authorize</title>
+        <link rel="stylesheet" href="css/bootstrap.css" />
+        <link rel="stylesheet" href="css/app.css" />
+        <style>
+            input.ng-valid {
+                background-color: lightgreen;
+            }
+
+            input.ng-dirty.ng-invalid-required,input.ng-dirty.ng-invalid-number {
+                background-color: red;
+            }
+
+            input.ng-dirty.ng-invalid-min {
+                background-color: yellow;
+            }
+
+
+        </style>
+        <script
+            src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+    <body>
+
+
+        <script>
+            /*<![CDATA[*/
+
+            var app = angular.module('myApp', []);
+
+            app.controller('authorizationCtrl', ($scope, $http) => {
+
+                const getUsers = () => {
+                    $http.get("api/v1/users").then((response) => {
+                        $scope.users = response.data;
+                        // .filter((user) => {
+                            // return !user.roles.includes("STAFF");
+                        // });
+
+                        console.log(response.data);
+                    }, (rejection) => {
+                        console.error(rejection);
+                    })
+                };
+
+                $scope.reset = () => {
+                    $scope.success = false;
+                    $scope.failure = false;
+
+                    getUsers();
+                }
+
+                $scope.authorizeUser = (i, role) => {
+                    $scope.users[i].roles.push(role);
+
+                    $http.put("/api/v1/users", $scope.users[i]).then(
+                        (success) => {
+                            console.log("success");
+                            location.reload();
+                        }, (rejection) => {
+                            console.log(rejection);
+                        }
+                    )
+                }
+                $scope.unauthorizeUser = (i, role) => {
+                	if (role == 'STAFF') {
+						$scope.users[i].roles = ['STAFF']
+                	} else {
+						$scope.users[i].roles = []
+                	}
+
+                    $http.put("/api/v1/users", $scope.users[i]).then(
+                        (success) => {
+                            console.log("success");
+                            location.reload();
+                        }, (rejection) => {
+                            console.log(rejection);
+                        }
+                    )
+                }
+
+            $scope.reset();
+
+            })
+
+            /*]]>*/
+        </script>
+
+        <div class="generic-container ng-cloak" ng-app="myApp"
+            ng-controller="authorizationCtrl as ctrl">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span class="lead">Authorize Staff</span>
+                </div>
+
+                    <div class="row" ng-repeat="user in users">
+                        <div class="form-group col-md-12">
+                            <label class="col-md-2 control-lable" for="file">{{user.username}}</label>
+                            <button ng-show='!user.roles.includes("STAFF")' class="btn" ng-click="authorizeUser($index, 'STAFF')"> Authorize as Staff </button>
+                            <button ng-show='user.roles.includes("STAFF") && !user.roles.includes("ADMIN")' class="btn" ng-click="unauthorizeUser($index, 'CUSTOMER')"> Demote to Customer </button>
+                            <button ng-show='user.roles.includes("STAFF") && !user.roles.includes("ADMIN")' class="btn" ng-click="authorizeUser($index, 'ADMIN')"> Authorize as Admin </button>
+                            <button ng-show='user.roles.includes("STAFF") && user.roles.includes("ADMIN")' class="btn" ng-click="unauthorizeUser($index, 'STAFF')"> Demote to Staff </button>
+                        </div>
+                    </div>
+            </div>
+
+            <a href="/index">Back</a>
+        </div>
+    </body>
+</html>

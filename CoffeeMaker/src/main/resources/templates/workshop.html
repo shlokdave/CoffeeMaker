@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<!--- Header information about the page -->
+<body>
+	<div layout:fragment="content">
+		<script	src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.js"></script>
+		<script>
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*<![CDATA[*/ 
+			var app = angular.module('myApp', []);
+			app.controller('populateCtrl', function($scope, $http, $q) {
+
+				/* Logic that handles controlling your page goes here */
+
+			    let x = 10;
+			    let y = 15;
+
+			    $scope.sum = (x + y);	
+
+			    console.log($scope);
+			    
+			    $scope.myFunction = function() {
+			    	alert($scope.x);
+			    }
+
+			    $scope.math = function(a, b) {
+			    	return 10 * a - b
+			    }
+			    
+			    $http.get("/api/v1/recipes").then(	function(success) {
+					$scope.success = true;
+				}, function(rejection) {
+					console.error("Error while adding recipe");
+				})
+				
+				$scope.timeIntervals = [
+					{value: 1, display: 'Today'},
+					{value: 2, display: 'Tomorrow'},
+					{value: 3, display: 'Next week'},
+					{value: 4, display: 'Never'}
+				];
+			    
+			    $scope.fruits = ["Apple", "Orange", "Banana"];
+				$scope.fruitsData = {
+						"Apples":
+							[
+								{ "calories": 10, "shorthand": "ap"},
+								{ "calories": 20, "shorthand": "ap2"},
+							],
+						"Oranges":
+							[
+								{ "calories": 10, "shorthand": "or"},
+								{ "calories": 20, "shorthand": "or2"},
+							]
+					};
+			});
+			
+			
+			/* Without these comments, Thymeleaf will try to parse the Javascript as XML and break itself sometimes */
+			/*]]>*/
+		</script>
+
+		<div ng-app="myApp" ng-controller="populateCtrl">
+
+			<!--- Various HTML elements, with extra tags telling Angular how to work with them, go here -->
+			<input type="text" ng-model="x" required="true" />
+			<input type="text" ng-model="y" required="true" />
+			<button ng-click="myFunction()">Click me!</button>
+			
+			<p>
+			The result is {{math(x,y)}}
+			</p>
+	
+			<div class="col-sm">
+				Select time interval: <br />
+				<select ng-model="interval"
+						ng-options="item as item.display for item in timeIntervals"
+						required="true">
+					<option value="">Select when it should be done</option>
+				</select>
+			</div>
+	
+			<div class="col-sm">
+				(Optional) Select the fruits to view <br />
+				<div ng-repeat="fruit in fruits track by $index">
+					<input type="checkbox"
+						ng-model="$parent.selectedFruit[fruit]">
+					<tt> {{fruit}}</tt>
+					</input>
+				</div>
+			</div>
+			
+			<div ng-repeat="(fruit, data) in fruitsData track by $index">
+				data for {{fruit}}:<br />
+				<div id="{{fruit}}">
+					<li ng-repeat="f in data">{{f}}</li>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+
+</body>
+</html>

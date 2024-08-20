@@ -1,0 +1,20 @@
+<diagram program="umletino" version="15.1"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLGeneric</id><coordinates><x>90</x><y>80</y><w>100</w><h>30</h></coordinates><panel_attributes>Frontend</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>100</y><w>30</w><h>630</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;610</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>310</x><y>80</y><w>120</w><h>30</h></coordinates><panel_attributes>APIUserController
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>740</x><y>80</y><w>100</w><h>30</h></coordinates><panel_attributes>UserRepository</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>360</x><y>100</y><w>30</w><h>620</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;600</additional_attributes></element><element><id>Relation</id><coordinates><x>780</x><y>100</y><w>30</w><h>620</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;600</additional_attributes></element><element><id>Relation</id><coordinates><x>130</x><y>180</y><w>250</w><h>40</h></coordinates><panel_attributes>updateUser
+lt=&lt;-</panel_attributes><additional_attributes>230;20;10;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>360</x><y>200</y><w>20</w><h>470</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>130</x><y>650</y><w>250</w><h>50</h></coordinates><panel_attributes>User Updated
+lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;30;230;10</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>300</y><w>430</w><h>50</h></coordinates><panel_attributes>findByUsername(username)
+lt=&lt;-</panel_attributes><additional_attributes>407;30;10;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>780</x><y>330</y><w>20</w><h>30</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>340</y><w>430</w><h>50</h></coordinates><panel_attributes>Option&lt;User&gt;
+lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;30;410;20</additional_attributes></element><element><id>UMLFrame</id><coordinates><x>100</x><y>380</y><w>740</w><h>320</h></coordinates><panel_attributes>user.isPresent()
+--
+false
+-.
+
+
+
+
+
+true
+-.
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>130</x><y>460</y><w>250</w><h>50</h></coordinates><panel_attributes>Error: User Does Not Exist
+lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;30;230;20</additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>530</y><w>430</w><h>50</h></coordinates><panel_attributes>save(user)
+lt=&lt;-</panel_attributes><additional_attributes>407;30;10;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>780</x><y>550</y><w>20</w><h>30</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>370</x><y>570</y><w>430</w><h>50</h></coordinates><panel_attributes>
+lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;30;410;10</additional_attributes></element></diagram>
